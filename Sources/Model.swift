@@ -50,20 +50,23 @@ struct DockItem: Identifiable {
     }
 
     var label: String {
-        if isSpacer { return isSmallSpacer ? "Kleiner Abstand" : "Abstand" }
+        if isSpacer { return isSmallSpacer ? String(localized: "Kleiner Abstand") : String(localized: "Abstand") }
         if let l = tileData["file-label"] as? String, !l.isEmpty { return l }
         if let l = tileData["label"] as? String, !l.isEmpty { return l }
-        return url?.deletingPathExtension().lastPathComponent ?? "Unbekannt"
+        return url?.deletingPathExtension().lastPathComponent ?? String(localized: "Unbekannt")
     }
 
+    /// Nur zum Anzeigen (übersetzt); zum Prüfen `isApp`, `isFolder` usw. verwenden
     var kind: String {
-        if isSpacer { return "Abstand" }
+        if isSpacer { return String(localized: "Abstand") }
         switch tileType {
-        case "directory-tile": return "Ordner"
-        case "url-tile": return "Link"
-        default: return url?.pathExtension == "app" ? "App" : "Dokument"
+        case "directory-tile": return String(localized: "Ordner")
+        case "url-tile": return String(localized: "Link")
+        default: return isApp ? String(localized: "App") : String(localized: "Dokument")
         }
     }
+
+    var isApp: Bool { !isSpacer && !isFolder && tileType != "url-tile" && url?.pathExtension == "app" }
 
     var isMissing: Bool {
         guard let url, url.isFileURL else { return false }

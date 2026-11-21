@@ -100,7 +100,8 @@ final class DockStore: ObservableObject {
         toast = t
         // Fehler auch ohne offenes Fenster sichtbar machen (z. B. nach Wechsel per Tastenkürzel)
         if error && !NSApp.windows.contains(where: { $0.isVisible && $0.canBecomeMain }) {
-            HUD.shared.show("Dock nicht vollständig übernommen", subtitle: "Bitte erneut anwenden",
+            HUD.shared.show(String(localized: "Dock nicht vollständig übernommen"),
+                            subtitle: String(localized: "Bitte erneut anwenden"),
                             symbol: "exclamationmark.triangle")
         }
         // Fehler (mit Liste fehlender Einträge) länger stehen lassen
@@ -111,7 +112,8 @@ final class DockStore: ObservableObject {
 
     func apply(message: String? = nil, saveIntoProfile: Bool = true) {
         let target = editorProfile
-        let msg = message ?? (savesIntoActiveProfile ? "Dock aktualisiert · gespeichert in „\(target!.name)“" : "Dock aktualisiert")
+        let msg = message ?? (savesIntoActiveProfile ? String(localized: "Dock aktualisiert · gespeichert in „\(target!.name)“")
+                                                     : String(localized: "Dock aktualisiert"))
         // Genau das, was ins Dock geschrieben wird (inkl. „Profile“-Stapel) – danach wird dagegen geprüft.
         let writeApps = apps.map(\.raw)
         let writeOthers = othersForWriting().map(\.raw)
@@ -197,9 +199,10 @@ final class DockStore: ObservableObject {
                         .subtracting(self.apps.map(Self.signature) + self.others.map(Self.signature))
                     let names = (apps + others).map { DockItem(raw: $0) }
                         .filter { missing.contains(Self.signature($0)) }.map(\.label)
-                    let detail = names.isEmpty ? "" : " Fehlt: " + names.prefix(3).joined(separator: ", ")
+                    let detail = names.isEmpty ? "" : " " + String(localized: "Fehlt: \(names.prefix(3).joined(separator: ", "))")
                         + (names.count > 3 ? " …" : "")
-                    self.showToast("Das Dock hat die Änderung nicht vollständig übernommen – bitte erneut anwenden.\(detail)", error: true)
+                    self.showToast(String(localized: "Das Dock hat die Änderung nicht vollständig übernommen – bitte erneut anwenden.")
+                                   + detail, error: true)
                 }
             }
         }
@@ -225,13 +228,16 @@ final class DockStore: ObservableObject {
         for url in urls {
             var isDir: ObjCBool = false
             FileManager.default.fileExists(atPath: url.path, isDirectory: &isDir)
+            let path = url.standardizedFileURL.path
             if url.pathExtension == "app" {
-                guard !apps.contains(where: { $0.url?.standardizedFileURL.path == url.standardizedFileURL.path }) else { continue }
+                guard !apps.contains(where: { $0.url?.standardizedFileURL.path == path }) else { continue }
                 apps.append(.app(url))
-            } else if isDir.boolValue {
-                others.append(.folder(url))
             } else {
-                others.append(.document(url))
+                // Ordner und Dokumente wie Apps nur einmal
+                guard !others.contains(where: { $0.url?.standardizedFileURL.path == path }) else { continue }
+                // Pakete (z. B. Keynote- oder Pages-Dokumente) sind technisch Ordner, gehören aber als Dokument ins Dock
+                let isFolder = isDir.boolValue && !NSWorkspace.shared.isFilePackage(atPath: url.path)
+                others.append(isFolder ? .folder(url) : .document(url))
             }
         }
     }
@@ -241,7 +247,7 @@ final class DockStore: ObservableObject {
         panel.allowedContentTypes = [.application]
         panel.allowsMultipleSelection = true
         panel.directoryURL = URL(fileURLWithPath: "/Applications")
-        panel.prompt = "Hinzufügen"
+        panel.prompt = String(localized: "Hinzufügen")
         if panel.runModal() == .OK { add(urls: panel.urls) }
     }
 
@@ -251,7 +257,7 @@ final class DockStore: ObservableObject {
         panel.canChooseFiles = true
         panel.allowsMultipleSelection = true
         panel.directoryURL = FileManager.default.homeDirectoryForCurrentUser
-        panel.prompt = "Hinzufügen"
+        panel.prompt = String(localized: "Hinzufügen")
         if panel.runModal() == .OK { add(urls: panel.urls) }
     }
 
@@ -369,7 +375,7 @@ final class DockStore: ObservableObject {
 
     func duplicateProfile(_ id: UUID) -> DockProfile? {
         guard let p = profiles.first(where: { $0.id == id }) else { return nil }
-        var copy = DockProfile(name: p.name + " Kopie", apps: p.apps, others: p.others, settings: p.settings)
+        var copy = DockProfile(name: String(localized: "\(p.name) Kopie"), apps: p.apps, others: p.others, settings: p.settings)
         copy.created = Date()
         profiles.append(copy)
         saveProfiles()
@@ -401,7 +407,7 @@ final class DockStore: ObservableObject {
         saveProfiles()
         activeProfileID = id
         if !hasChanges { reload() }
-        showToast("Aktuelles Dock in „\(profiles[i].name)“ gespeichert")
+        showToast(String(localized: "Aktuelles Dock in „\(profiles[i].name)“ gespeichert"))
     }
 
     func saveRealDockAsNewProfile(name: String) {
@@ -411,7 +417,7 @@ final class DockStore: ObservableObject {
         saveProfiles()
         activeProfileID = p.id
         if !hasChanges { reload() }
-        showToast("Profil „\(name)“ angelegt")
+        showToast(String(localized: "Profil „\(name)“ angelegt"))
     }
 
     func moveProfiles(from: IndexSet, to: Int) {
@@ -437,7 +443,7 @@ final class DockStore: ObservableObject {
         // Editor-Stand setzen, ohne dass activeProfileID schon Dateien anfasst
         untracked { loadIntoEditor(p) }
         // Das Profil selbst ist schon der gespeicherte Stand → nicht zurückschreiben
-        apply(message: "Profil „\(p.name)“ angewendet", saveIntoProfile: false)
+        apply(message: String(localized: "Profil „\(p.name)“ angewendet"), saveIntoProfile: false)
         dockLog.notice("Profil \(p.name, privacy: .public): Dock neu gestartet nach \(Int(Date().timeIntervalSince(start) * 1000)) ms")
         activeProfileID = p.id
     }
@@ -450,7 +456,7 @@ final class DockStore: ObservableObject {
         }
         profiles[i].hotkey = hotkey
         saveProfiles()
-        if let hotkey { showToast("\(hotkey.display) wendet jetzt „\(profiles[i].name)“ an") }
+        if let hotkey { showToast(String(localized: "\(hotkey.display) wendet jetzt „\(profiles[i].name)“ an")) }
     }
 
     func setLocked(_ id: UUID, _ locked: Bool) {

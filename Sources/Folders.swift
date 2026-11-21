@@ -56,9 +56,13 @@ extension DockStore {
         panel.allowedContentTypes = [.application]
         panel.allowsMultipleSelection = true
         panel.directoryURL = URL(fileURLWithPath: "/Applications")
-        panel.prompt = "In Ordner legen"
+        panel.prompt = String(localized: "In Ordner legen")
         guard panel.runModal() == .OK else { return }
-        try? writeAliases(panel.urls, into: dir)
+        do {
+            try writeAliases(panel.urls, into: dir)
+        } catch {
+            showToast(String(localized: "Apps konnten nicht in den Ordner gelegt werden: \(error.localizedDescription)"), error: true)
+        }
     }
 
     private func writeAliases(_ urls: [URL], into dir: URL) throws {
@@ -78,19 +82,23 @@ extension DockStore {
     // MARK: Namensvorschlag aus App-Store-Kategorie
 
     private static let categoryNames: [String: String] = [
-        "developer-tools": "Entwicklung", "productivity": "Produktivität", "graphics-design": "Design",
-        "photography": "Fotografie", "video": "Video", "music": "Musik", "social-networking": "Kommunikation",
-        "utilities": "Dienstprogramme", "business": "Business", "entertainment": "Unterhaltung",
-        "education": "Bildung", "finance": "Finanzen", "news": "News", "reference": "Nachschlagen",
-        "lifestyle": "Lifestyle", "travel": "Reisen", "weather": "Wetter", "healthcare-fitness": "Gesundheit",
-        "sports": "Sport", "medical": "Medizin",
+        "developer-tools": String(localized: "Entwicklung"), "productivity": String(localized: "Produktivität"),
+        "graphics-design": String(localized: "Design"), "photography": String(localized: "Fotografie"),
+        "video": String(localized: "Video"), "music": String(localized: "Musik"),
+        "social-networking": String(localized: "Kommunikation"), "utilities": String(localized: "Dienstprogramme"),
+        "business": String(localized: "Business"), "entertainment": String(localized: "Unterhaltung"),
+        "education": String(localized: "Bildung"), "finance": String(localized: "Finanzen"),
+        "news": String(localized: "News"), "reference": String(localized: "Nachschlagen"),
+        "lifestyle": String(localized: "Lifestyle"), "travel": String(localized: "Reisen"),
+        "weather": String(localized: "Wetter"), "healthcare-fitness": String(localized: "Gesundheit"),
+        "sports": String(localized: "Sport"), "medical": String(localized: "Medizin"),
     ]
 
     static func suggestedName(for urls: [URL]) -> String? {
         let cats: [String] = urls.compactMap { url in
             guard let raw = Bundle(url: url)?.infoDictionary?["LSApplicationCategoryType"] as? String else { return nil }
             let key = raw.replacingOccurrences(of: "public.app-category.", with: "")
-            return key.hasSuffix("games") ? "Spiele" : categoryNames[key]
+            return key.hasSuffix("games") ? String(localized: "Spiele") : categoryNames[key]
         }
         let counts = Dictionary(cats.map { ($0, 1) }, uniquingKeysWith: +)
         return counts.max { $0.value < $1.value }?.key
@@ -177,6 +185,8 @@ struct NewFolderSheet: View {
 
             if let error {
                 Text(error).foregroundStyle(.red).font(.callout)
+            } else if chosen.isEmpty {
+                Text("Wähle mindestens eine App für den Ordner aus.").foregroundStyle(.secondary).font(.callout)
             }
 
             HStack {
@@ -188,7 +198,7 @@ struct NewFolderSheet: View {
                 Button("Ordner erstellen", action: create)
                     .keyboardShortcut(.defaultAction)
                     .buttonStyle(.borderedProminent)
-                    .disabled(finalName.isEmpty)
+                    .disabled(finalName.isEmpty || chosen.isEmpty)
             }
         }
         .padding(20)
@@ -200,8 +210,11 @@ struct NewFolderSheet: View {
     private var finalName: String { name.trimmingCharacters(in: .whitespaces) }
 
     private func setup() {
-        var urls = store.apps.compactMap(\.url).filter { $0.pathExtension == "app" }
-        for u in request.preselected where !urls.contains(u) { urls.append(u) }
+        // Jede App nur einmal anbieten – steht sie doppelt im Dock, entstünden sonst zwei Aliasse
+        var urls: [URL] = []
+        for u in store.apps.compactMap(\.url) + request.preselected where u.pathExtension == "app" && !urls.contains(u) {
+            urls.append(u)
+        }
         candidates = urls
         chosen = Set(request.preselected)
         updateSuggestion()
@@ -210,7 +223,7 @@ struct NewFolderSheet: View {
 
     private func updateSuggestion() {
         guard !nameEdited else { return }
-        name = DockStore.suggestedName(for: Array(chosen)) ?? (chosen.isEmpty ? "" : "Neuer Ordner")
+        name = DockStore.suggestedName(for: Array(chosen)) ?? (chosen.isEmpty ? "" : String(localized: "Neuer Ordner"))
     }
 
     private func pickOtherApps() {
@@ -226,7 +239,8 @@ struct NewFolderSheet: View {
     }
 
     private func create() {
-        guard !finalName.isEmpty else { return }
+        // Ohne gewählte App entstünde ein leerer Ordner (Enter im Namensfeld umgeht den gesperrten Knopf)
+        guard !finalName.isEmpty, !chosen.isEmpty else { return }
         // Reihenfolge wie im Raster beibehalten
         let ordered = candidates.filter { chosen.contains($0) }
         do {
@@ -235,7 +249,7 @@ struct NewFolderSheet: View {
             if applyNow { store.apply() }
             dismiss()
         } catch {
-            self.error = "Ordner konnte nicht erstellt werden: \(error.localizedDescription)"
+            self.error = String(localized: "Ordner konnte nicht erstellt werden: \(error.localizedDescription)")
         }
     }
 }

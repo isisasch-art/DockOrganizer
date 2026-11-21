@@ -37,7 +37,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDockMenu(_ sender: NSApplication) -> NSMenu? {
         let menu = NSMenu()
 
-        let header = NSMenuItem(title: "Profil wechseln", action: nil, keyEquivalent: "")
+        let header = NSMenuItem(title: String(localized: "Profil wechseln"), action: nil, keyEquivalent: "")
         header.isEnabled = false
         menu.addItem(header)
 
@@ -56,8 +56,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // Aktuelles Dock ins aktive Profil speichern
         if let active = store.activeProfile {
             let save = NSMenuItem(title: active.locked
-                                    ? "„\(active.name)“ ist gesperrt"
-                                    : "Aktuelles Dock in „\(active.name)“ speichern",
+                                    ? String(localized: "„\(active.name)“ ist gesperrt")
+                                    : String(localized: "Aktuelles Dock in „\(active.name)“ speichern"),
                                   action: active.locked ? nil : #selector(saveIntoActive), keyEquivalent: "")
             save.target = self
             save.isEnabled = !active.locked
@@ -65,7 +65,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         // In ein anderes Profil speichern
-        let saveInto = NSMenuItem(title: "Aktuelles Dock speichern in", action: nil, keyEquivalent: "")
+        let saveInto = NSMenuItem(title: String(localized: "Aktuelles Dock speichern in"), action: nil, keyEquivalent: "")
         let sub = NSMenu()
         for p in store.profiles where !p.locked {
             let i = NSMenuItem(title: p.name, action: #selector(saveInto(_:)), keyEquivalent: "")
@@ -74,7 +74,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             sub.addItem(i)
         }
         if !sub.items.isEmpty { sub.addItem(.separator()) }
-        let newItem = NSMenuItem(title: "Neues Profil …", action: #selector(saveAsNew), keyEquivalent: "")
+        let newItem = NSMenuItem(title: String(localized: "Neues Profil …"), action: #selector(saveAsNew), keyEquivalent: "")
         newItem.target = self
         sub.addItem(newItem)
         saveInto.submenu = sub
@@ -100,13 +100,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     @objc private func saveAsNew() {
         NSApp.activate(ignoringOtherApps: true)
         let alert = NSAlert()
-        alert.messageText = "Neues Profil"
-        alert.informativeText = "Speichert das Dock, so wie es gerade aussieht, als neues Profil."
+        alert.messageText = String(localized: "Neues Profil")
+        alert.informativeText = String(localized: "Speichert das Dock, so wie es gerade aussieht, als neues Profil.")
         let field = NSTextField(frame: NSRect(x: 0, y: 0, width: 260, height: 24))
-        field.placeholderString = "z. B. Arbeit, Design, Freizeit"
+        field.placeholderString = String(localized: "z. B. Arbeit, Design, Freizeit")
         alert.accessoryView = field
-        alert.addButton(withTitle: "Speichern")
-        alert.addButton(withTitle: "Abbrechen")
+        alert.addButton(withTitle: String(localized: "Speichern"))
+        alert.addButton(withTitle: String(localized: "Abbrechen"))
         alert.window.initialFirstResponder = field
         guard alert.runModal() == .alertFirstButtonReturn else { return }
         let name = field.stringValue.trimmingCharacters(in: .whitespaces)

@@ -71,7 +71,7 @@ struct Hotkey: Equatable, Hashable {
     ]
 
     private static let specialKeys: [Int: String] = [
-        kVK_Space: "Leertaste", kVK_Return: "↩", kVK_Tab: "⇥", kVK_Delete: "⌫",
+        kVK_Space: String(localized: "Leertaste"), kVK_Return: "↩", kVK_Tab: "⇥", kVK_Delete: "⌫",
         kVK_ForwardDelete: "⌦", kVK_Escape: "⎋", kVK_LeftArrow: "←", kVK_RightArrow: "→",
         kVK_UpArrow: "↑", kVK_DownArrow: "↓", kVK_Home: "↖", kVK_End: "↘",
         kVK_PageUp: "⇞", kVK_PageDown: "⇟",
@@ -165,11 +165,11 @@ final class HotkeyManager {
         let store = DockStore.shared
         guard let pid = actions[id], let p = store.profiles.first(where: { $0.id == pid }) else { return }
         if p.id == store.activeProfileID && !store.hasChanges {
-            HUD.shared.show(p.name, subtitle: "ist bereits aktiv", symbol: "checkmark.circle")
+            HUD.shared.show(p.name, subtitle: String(localized: "ist bereits aktiv"), symbol: "checkmark.circle")
             return
         }
         store.applyProfile(p)
-        HUD.shared.show(p.name, subtitle: "Profil wird angewendet", symbol: "square.stack.3d.up")
+        HUD.shared.show(p.name, subtitle: String(localized: "Profil wird angewendet"), symbol: "square.stack.3d.up")
     }
 
     // MARK: Belegung prüfen
@@ -178,9 +178,9 @@ final class HotkeyManager {
         case profile(String), system, otherApp
         var text: String {
             switch self {
-            case .profile(let n): return "Schon für Profil „\(n)“ vergeben"
-            case .system: return "Von macOS belegt (Systemeinstellungen → Tastatur → Tastaturkurzbefehle)"
-            case .otherApp: return "Von einer anderen App belegt"
+            case .profile(let n): return String(localized: "Schon für Profil „\(n)“ vergeben")
+            case .system: return String(localized: "Von macOS belegt (Systemeinstellungen → Tastatur → Tastaturkurzbefehle)")
+            case .otherApp: return String(localized: "Von einer anderen App belegt")
             }
         }
     }
@@ -273,7 +273,7 @@ struct HotkeyPicker: View {
                     Button("Kein Tastenkürzel") { store.setHotkey(profileID, nil) }
                 }
             } label: {
-                Text(hotkey?.display ?? "Kein Tastenkürzel")
+                Text(hotkey?.display ?? String(localized: "Kein Tastenkürzel"))
                     .monospaced()
             }
             .fixedSize()
@@ -359,11 +359,11 @@ private struct HotkeyRecorder: View {
         candidate = hk
         isWarning = false
         if !hk.isValid {
-            message = "Bitte mit ⌃, ⌥ oder ⌘ kombinieren"
+            message = String(localized: "Bitte mit ⌃, ⌥ oder ⌘ kombinieren")
         } else if let c = HotkeyManager.shared.conflict(for: hk, excluding: profileID) {
             message = c.text
         } else if hk.looksLikeAppShortcut {
-            message = "Nur mit ⌘ – überdeckt dann gleichnamige Befehle in allen Apps"
+            message = String(localized: "Nur mit ⌘ – überdeckt dann gleichnamige Befehle in allen Apps")
             isWarning = true
         } else {
             message = nil

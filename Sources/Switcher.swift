@@ -14,7 +14,7 @@ extension DockStore {
         objectWillChange.send()
         UserDefaults.standard.set(on, forKey: "switcherEnabled")
         syncSwitcherFiles()
-        let msg = on ? "„Profile“-Stapel zum Dock hinzugefügt" : "„Profile“-Stapel entfernt"
+        let msg = on ? String(localized: "„Profile“-Stapel zum Dock hinzugefügt") : String(localized: "„Profile“-Stapel entfernt")
         guard hasChanges else { apply(message: msg); return }
         // Ungespeicherte Editor-Änderungen nicht nebenbei ins Dock schreiben:
         // nur den Stapel im echten Dock ergänzen bzw. entfernen.
@@ -37,7 +37,7 @@ extension DockStore {
         var result = others.filter { !isSwitcherTile($0) }
         if switcherEnabled {
             var tile = DockItem.folder(Self.switcherFolder)
-            tile.setTileValue("file-label", "Profile")
+            tile.setTileValue("file-label", String(localized: "Profile"))
             tile.setTileValue("displayas", 0)   // Stapel
             tile.setTileValue("showas", 3)      // Liste
             if let existing = others.first(where: isSwitcherTile) { tile = existing }

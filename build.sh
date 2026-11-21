@@ -12,6 +12,8 @@ BIN="$(swift build -c release "${ARCHS[@]}" --show-bin-path)"
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN/DockOrganizer" "$APP/Contents/MacOS/DockOrganizer"
+# Übersetzungen (de = Entwicklungssprache, en); SwiftUI und String(localized:) suchen sie im App-Bundle
+cp -R Resources/*.lproj "$APP/Contents/Resources/"
 
 # Icon (Icon-Composer-Format mit Hell-/Dunkel-Variante; actool erzeugt Assets.car + AppIcon.icns als Fallback)
 TMP=$(mktemp -d)
@@ -38,6 +40,7 @@ cat > "$APP/Contents/Info.plist" <<'PLIST'
   <key>CFBundleShortVersionString</key><string>1.0</string>
   <key>CFBundleVersion</key><string>1</string>
   <key>CFBundleDevelopmentRegion</key><string>de</string>
+  <key>CFBundleLocalizations</key><array><string>de</string><string>en</string></array>
   <key>LSMinimumSystemVersion</key><string>14.0</string>
   <key>NSHighResolutionCapable</key><true/>
   <key>CFBundleDocumentTypes</key>

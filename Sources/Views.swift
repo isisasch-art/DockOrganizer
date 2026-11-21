@@ -273,7 +273,9 @@ struct EditorView: View {
                 .padding(.vertical, 6)
         }
         .navigationTitle("Anordnung")
-        .navigationSubtitle(store.editorProfile.map { "Profil: \($0.name)" + ($0.locked ? " (gesperrt)" : "") } ?? "")
+        .navigationSubtitle(store.editorProfile.map {
+            $0.locked ? String(localized: "Profil: \($0.name) (gesperrt)") : String(localized: "Profil: \($0.name)")
+        } ?? "")
         .inspector(isPresented: $showLibrary) {
             AppLibraryView()
                 .inspectorColumnWidth(min: 240, ideal: 280, max: 420)
@@ -335,7 +337,7 @@ struct DockItemRow: View {
 
     private var moveLabel: String {
         let n = store.selection.contains(item.id) ? store.selection.count : 1
-        return n > 1 ? "\(n) Apps in neuen Ordner …" : "In neuen Ordner …"
+        return n > 1 ? String(localized: "\(n) Apps in neuen Ordner …") : String(localized: "In neuen Ordner …")
     }
 
     var body: some View {
@@ -408,7 +410,7 @@ struct DockItemRow: View {
                     Button("Art") { store.update(item.id) { $0.setTileValue("arrangement", 5) } }
                 }
             }
-            if item.kind == "App" {
+            if item.isApp {
                 Button(moveLabel) {
                     let sel = store.selection.contains(item.id)
                         ? (store.apps + store.others).filter { store.selection.contains($0.id) }
@@ -576,7 +578,7 @@ struct ProfileDetailView: View {
                         GroupBox("Dock-Optionen in diesem Profil") {
                             Grid(alignment: .leading, horizontalSpacing: 24, verticalSpacing: 6) {
                                 GridRow { Text("Größe").foregroundStyle(.secondary); Text("\(Int(s.tilesize)) pt") }
-                                GridRow { Text("Position").foregroundStyle(.secondary); Text(["left": "Links", "right": "Rechts"][s.orientation] ?? "Unten") }
+                                GridRow { Text("Position").foregroundStyle(.secondary); Text(s.orientation == "left" ? "Links" : s.orientation == "right" ? "Rechts" : "Unten") }
                                 GridRow { Text("Ausblenden").foregroundStyle(.secondary); Text(s.autohide ? "Automatisch" : "Nein") }
                                 GridRow { Text("Vergrößerung").foregroundStyle(.secondary); Text(s.magnification ? "\(Int(s.largesize)) pt" : "Aus") }
                                 GridRow { Text("Zuletzt benutzt").foregroundStyle(.secondary); Text(s.showRecents ? "Anzeigen" : "Ausblenden") }

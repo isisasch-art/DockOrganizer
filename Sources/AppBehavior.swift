@@ -45,7 +45,9 @@ final class AppBehavior: ObservableObject {
         do {
             if on { try SMAppService.mainApp.register() } else { try SMAppService.mainApp.unregister() }
         } catch {
-            DockStore.shared.showToast("Autostart konnte nicht \(on ? "eingeschaltet" : "ausgeschaltet") werden: \(error.localizedDescription)", error: true)
+            let text = on ? String(localized: "Autostart konnte nicht eingeschaltet werden: \(error.localizedDescription)")
+                          : String(localized: "Autostart konnte nicht ausgeschaltet werden: \(error.localizedDescription)")
+            DockStore.shared.showToast(text, error: true)
         }
         refresh()
         if needsApproval { SMAppService.openSystemSettingsLoginItems() }

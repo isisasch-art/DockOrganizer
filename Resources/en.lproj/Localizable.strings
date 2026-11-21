@@ -1,0 +1,211 @@
+/*
+  Englische Texte für Dock Organizer.
+  Schlüssel ist jeweils der deutsche Text aus dem Quelltext (Deutsch ist die Entwicklungssprache).
+  Platzhalter: %@ = Text, %lld = Zahl. Gleichlautende Texte (z. B. „App“, „Position“, „%lld pt“)
+  fehlen hier absichtlich – dann gilt der Schlüssel selbst.
+*/
+
+/* Allgemein (an mehreren Stellen) */
+"Abbrechen" = "Cancel";
+"Speichern" = "Save";
+"Löschen" = "Delete";
+"Hinzufügen" = "Add";
+"Auf Dock anwenden" = "Apply to Dock";
+"Exportieren …" = "Export…";
+"Neues Profil" = "New Profile";
+"Neuer Ordner" = "New Folder";
+"Profile" = "Profiles";
+"Aktuelles Dock in „%@“ speichern" = "Save Current Dock to “%@”";
+"Profil „%@“ löschen?" = "Delete profile “%@”?";
+"Aus dem Dock entfernen" = "Remove from Dock";
+"Größe" = "Size";
+"Vergrößerung" = "Magnification";
+"Links" = "Left";
+"Unten" = "Bottom";
+"Rechts" = "Right";
+"Automatisch" = "Automatic";
+"Ausblenden" = "Hide";
+
+/* Dock-Einträge: Art, Abstände, Ordner-Darstellung (Begriffe wie im Kontextmenü des Docks) */
+"Abstand" = "Spacer";
+"Kleiner Abstand" = "Small Spacer";
+"Unbekannt" = "Unknown";
+"Ordner" = "Folder";
+"Dokument" = "Document";
+"Stapel" = "Stack";
+"Anzeigen als" = "Display as";
+"Inhalt" = "View content as";
+"Inhalt zeigen als" = "View content as";
+"Fächer" = "Fan";
+"Raster" = "Grid";
+"Liste" = "List";
+"Sortieren nach" = "Sort by";
+"Hinzugefügt" = "Date Added";
+"Geändert" = "Date Modified";
+"Erstellt" = "Date Created";
+"Art" = "Kind";
+
+/* Menüleiste */
+"Keine Profile" = "No Profiles";
+"Profil anwenden" = "Apply Profile";
+"Dock automatisch ausblenden" = "Automatically Hide Dock";
+"Neuer Dock-Ordner …" = "New Dock Folder…";
+"Dock neu starten" = "Restart Dock";
+"Bei der Anmeldung starten" = "Open at Login";
+"Dock Organizer öffnen …" = "Open Dock Organizer…";
+"Beenden" = "Quit";
+
+/* Rechtsklick-Menü am App-Symbol im Dock */
+"Profil wechseln" = "Switch Profile";
+"„%@“ ist gesperrt" = "“%@” is locked";
+"Aktuelles Dock speichern in" = "Save Current Dock to";
+"Neues Profil …" = "New Profile…";
+"Speichert das Dock, so wie es gerade aussieht, als neues Profil." = "Saves the Dock in its current state as a new profile.";
+"z. B. Arbeit, Design, Freizeit" = "e.g. Work, Design, Leisure";
+
+/* Meldungen und Einblendung */
+"Dock nicht vollständig übernommen" = "Dock not fully updated";
+"Bitte erneut anwenden" = "Please apply again";
+"Dock aktualisiert" = "Dock updated";
+"Dock aktualisiert · gespeichert in „%@“" = "Dock updated · saved to “%@”";
+"Das Dock hat die Änderung nicht vollständig übernommen – bitte erneut anwenden." = "The Dock didn’t fully apply the change – please apply again.";
+"Fehlt: %@" = "Missing: %@";
+"Aktuelles Dock in „%@“ gespeichert" = "Current Dock saved to “%@”";
+"Profil „%@“ angelegt" = "Profile “%@” created";
+"Profil „%@“ angewendet" = "Profile “%@” applied";
+"%@ wendet jetzt „%@“ an" = "%@ now applies “%@”";
+"„Profile“-Stapel zum Dock hinzugefügt" = "“Profiles” stack added to the Dock";
+"„Profile“-Stapel entfernt" = "“Profiles” stack removed";
+"Autostart konnte nicht eingeschaltet werden: %@" = "Couldn’t turn on Open at Login: %@";
+"Autostart konnte nicht ausgeschaltet werden: %@" = "Couldn’t turn off Open at Login: %@";
+"Apps konnten nicht in den Ordner gelegt werden: %@" = "Couldn’t add the apps to the folder: %@";
+"ist bereits aktiv" = "is already active";
+"Profil wird angewendet" = "Applying profile";
+
+/* Name einer Profilkopie */
+"%@ Kopie" = "%@ copy";
+
+/* Seitenleiste und Profile */
+"Anordnung" = "Layout";
+"Optionen" = "Options";
+"Löschen …" = "Delete…";
+"Profil importieren" = "Import Profile";
+"Das Profil ist gesperrt (z. B. dein Backup). Löschen lässt sich nicht rückgängig machen." = "This profile is locked (e.g. your backup). Deleting it can’t be undone.";
+"Nicht angewendete Änderungen" = "Unapplied Changes";
+"Wird auch in Profil „%@“ gespeichert" = "Will also be saved to profile “%@”";
+"Verwerfen" = "Discard";
+"%lld Apps · %lld Ordner/Dokumente · erstellt %@" = "%lld apps · %lld folders/documents · created %@";
+"Gesperrt – Änderungen im Editor nicht automatisch in dieses Profil speichern" = "Locked – don’t automatically save editor changes to this profile";
+"Im Editor öffnen" = "Open in Editor";
+"Mit aktueller Anordnung überschreiben" = "Overwrite with Current Layout";
+"Duplizieren" = "Duplicate";
+"Dock-Optionen in diesem Profil" = "Dock Options in This Profile";
+"Nein" = "No";
+"Aus" = "Off";
+"Zuletzt benutzt" = "Recent apps";
+"Anzeigen" = "Show";
+"Profil mit der aktuellen Anordnung im Editor überschreiben?" = "Overwrite the profile with the current layout from the editor?";
+"Überschreiben" = "Overwrite";
+"Profil nicht gefunden" = "Profile Not Found";
+"Speichert die aktuelle Anordnung und die Dock-Optionen als Profil – z. B. „Arbeit“, „Design“ oder „Freizeit“." = "Saves the current layout and the Dock options as a profile – e.g. “Work”, “Design” or “Leisure”.";
+
+/* Tastenkürzel */
+"Tastenkürzel" = "Keyboard Shortcut";
+"Freie Vorschläge" = "Available Suggestions";
+"Eigenes Kürzel aufnehmen …" = "Record Custom Shortcut…";
+"Kein Tastenkürzel" = "No Keyboard Shortcut";
+"wendet das Profil von überall aus an" = "applies the profile from anywhere";
+"Drücke die gewünschte Tastenkombination" = "Press the key combination you want";
+"Mit ⌃, ⌥ oder ⌘ kombinieren · ⎋ bricht ab" = "Combine with ⌃, ⌥ or ⌘ · ⎋ cancels";
+"Übernehmen" = "Use";
+"Bitte mit ⌃, ⌥ oder ⌘ kombinieren" = "Please combine with ⌃, ⌥ or ⌘";
+"Nur mit ⌘ – überdeckt dann gleichnamige Befehle in allen Apps" = "⌘ only – overrides the same shortcut in every app";
+"Schon für Profil „%@“ vergeben" = "Already used for profile “%@”";
+"Von macOS belegt (Systemeinstellungen → Tastatur → Tastaturkurzbefehle)" = "Used by macOS (System Settings → Keyboard → Keyboard Shortcuts)";
+"Von einer anderen App belegt" = "Used by another app";
+"Leertaste" = "Space";
+
+/* Editor (Anordnung) */
+"Ordner & Dokumente · %lld" = "Folders & Documents · %lld";
+"Ziehen zum Sortieren · Maus über Eintrag → ⊖ entfernt · Apps markieren + ⌘N = neuer Ordner" = "Drag to sort · hover over an item → ⊖ removes it · select apps + ⌘N = new folder";
+"Profil: %@" = "Profile: %@";
+"Profil: %@ (gesperrt)" = "Profile: %@ (locked)";
+"Apps hinzufügen" = "Add Apps";
+"App-Bibliothek ein-/ausblenden" = "Show or hide the app library";
+"Neuer Ordner aus Apps (⌘N)" = "New folder from apps (⌘N)";
+"App …" = "App…";
+"Ordner oder Dokument …" = "Folder or Document…";
+"Gruppen alphabetisch sortieren" = "Sort Groups Alphabetically";
+"Duplikate entfernen" = "Remove Duplicates";
+"Fehlende Einträge entfernen (%lld)" = "Remove Missing Items (%lld)";
+"Alle Abstände entfernen" = "Remove All Spacers";
+"Aufräumen" = "Clean Up";
+"Neu laden" = "Reload";
+"Aktuelles Dock neu einlesen" = "Reload the current Dock";
+"%lld Apps in neuen Ordner …" = "Move %lld Apps to New Folder…";
+"In neuen Ordner …" = "Move to New Folder…";
+"Fehlt" = "Missing";
+"Im Finder zeigen" = "Show in Finder";
+"Apps in diesen Ordner legen …" = "Add Apps to This Folder…";
+"Abstand dahinter einfügen" = "Insert Spacer After";
+"Entfernen" = "Remove";
+
+/* Seitenleiste „Apps hinzufügen“ */
+"App suchen" = "Search apps";
+"Nur Apps, die nicht im Dock sind" = "Only apps not in the Dock";
+"Klick auf ＋ fügt hinzu · oder in die Liste ziehen" = "Click ＋ to add · or drag into the list";
+"Ist im Dock – klicken zum Entfernen" = "In the Dock – click to remove";
+"Zum Dock hinzufügen" = "Add to Dock";
+
+/* Neuer Ordner */
+"Ordnername" = "Folder name";
+"Apps auswählen · %lld gewählt" = "Choose Apps · %lld selected";
+"Alle" = "All";
+"Keine" = "None";
+"Andere App …" = "Other App…";
+"Gewählte Apps aus dem Dock entfernen" = "Remove selected apps from the Dock";
+"Sofort auf Dock anwenden" = "Apply to Dock immediately";
+"Wähle mindestens eine App für den Ordner aus." = "Choose at least one app for the folder.";
+"Wird angelegt in ~/Dock-Ordner/" = "Will be created in ~/Dock-Ordner/";
+"Ordner erstellen" = "Create Folder";
+"Ordner konnte nicht erstellt werden: %@" = "Couldn’t create the folder: %@";
+"In Ordner legen" = "Add to Folder";
+
+/* Namensvorschläge für neue Ordner (nach App-Store-Kategorie) */
+"Entwicklung" = "Development";
+"Produktivität" = "Productivity";
+"Fotografie" = "Photography";
+"Musik" = "Music";
+"Kommunikation" = "Communication";
+"Dienstprogramme" = "Utilities";
+"Unterhaltung" = "Entertainment";
+"Bildung" = "Education";
+"Finanzen" = "Finance";
+"Nachschlagen" = "Reference";
+"Reisen" = "Travel";
+"Wetter" = "Weather";
+"Gesundheit" = "Health";
+"Sport" = "Sports";
+"Medizin" = "Medical";
+"Spiele" = "Games";
+
+/* Optionen */
+"Darstellung" = "Appearance";
+"Vergrößerte Größe" = "Magnified size";
+"Verhalten" = "Behavior";
+"Dock automatisch ein- und ausblenden" = "Automatically hide and show the Dock";
+"Zuletzt benutzte Apps im Dock anzeigen" = "Show recent apps in Dock";
+"Fenster in App-Symbol ablegen" = "Minimize windows into application icon";
+"Effekt beim Ablegen" = "Minimize using";
+"Trichter" = "Genie effect";
+"Linear" = "Scale effect";
+"Profile im Dock" = "Profiles in the Dock";
+"„Profile“-Stapel im Dock anzeigen" = "Show “Profiles” stack in Dock";
+"Ein Klick auf den Stapel zeigt alle Profile – ein Klick auf ein Profil wechselt sofort." = "Clicking the stack shows all profiles – clicking a profile switches to it immediately.";
+"Dock-Änderungen werden erst mit „Auf Dock anwenden“ (⌘S) übernommen. Dabei startet das Dock kurz neu." = "Dock changes only take effect with “Apply to Dock” (⌘S). The Dock restarts briefly.";
+"Bei der Anmeldung automatisch starten" = "Open automatically at login";
+"Muss noch in den Systemeinstellungen erlaubt werden." = "Still needs to be allowed in System Settings.";
+"Öffnen" = "Open";
+"Im Hintergrund ausführen" = "Run in background";
+"Kein Symbol im Dock, startet ohne Fenster. Bedienung über das Menüleisten-Symbol; Tastenkürzel funktionieren weiter." = "No icon in the Dock, starts without a window. Use the menu bar icon; keyboard shortcuts keep working.";
+"Diese beiden Einstellungen gelten sofort." = "Both settings take effect immediately.";
