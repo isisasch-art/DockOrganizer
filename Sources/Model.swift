@@ -13,13 +13,38 @@ enum DockPrefs {
 
     static func set(_ key: String, _ value: Any?) {
         CFPreferencesSetAppValue(key as CFString, value.map { $0 as AnyObject }, domain)
+        writes += 1
     }
+
+    /// Zählt die Schreibvorgänge (nur Hauptthread) – ein verspätetes Zurückschreiben erkennt daran,
+    /// dass inzwischen ein neuerer Stand geschrieben wurde.
+    private static var writes = 0
+    /// Was das Dock beim Beenden mit seinem alten Stand überschreiben kann.
+    private static let restoredKeys = ["persistent-apps", "persistent-others"] + DockSettings.keys
 
     static func restartDock() {
         // Direkt das Signal senden – schneller als killall als eigenen Prozess zu starten.
         let docks = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock")
         if !docks.isEmpty {
-            docks.forEach { kill($0.processIdentifier, SIGTERM) }
+            // Das Dock schreibt beim Beenden oft seinen alten Stand zurück und überschreibt damit, was gerade
+            // geschrieben wurde (gemessen: bei Wechseln im Abstand von 4 s jeder zweite – das neue Profil kam
+            // erst mit der Nachprüfung nach rund 4,5 s, oder gar nicht, wenn vorher schon der nächste Wechsel
+            // kam). Deshalb den Stand vor dem Beenden festhalten und ihn noch einmal schreiben, sobald das alte
+            // Dock beendet ist – bevor das neu gestartete ihn liest.
+            sync()
+            let snapshot = restoredKeys.map { ($0, get($0)) }
+            let generation = writes
+            let pids = docks.map(\.processIdentifier)
+            pids.forEach { kill($0, SIGTERM) }
+            DispatchQueue.global(qos: .userInteractive).async {
+                let deadline = Date().addingTimeInterval(2)
+                while pids.contains(where: { kill($0, 0) == 0 }) && Date() < deadline { usleep(2_000) }
+                DispatchQueue.main.async {
+                    guard writes == generation else { return }   // inzwischen neuer Stand geschrieben
+                    for (key, value) in snapshot { set(key, value) }
+                    sync()
+                }
+            }
             return
         }
         let p = Process()
